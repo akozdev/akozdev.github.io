@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700|Muli:300,400,700,900&display=swap"
+          rel="stylesheet">
+
+    <link href="./css/style.css" rel="stylesheet">
+    <title>Blog</title>
+</head>
+<body>
+<main>
+    <div class="container margin-top--big">
+        <h1 class="heading--big">The prototypal nature of JavaScript</h1>
+        <p class="paragraph">The inheritance model in JavaScript always raises many questions. It can be confusing,
+            especially for
+            programmers coming from class-based languages, like Java, C# or Python. In this article, we take a
+            closer look at the prototypal nature of JavaScript.</p>
+        <h2 class="heading--medium" id="how-to-create-objects-in-javascript">How to create objects in JavaScript?</h2>
+        <p class="paragraph">JavaScript supports many paradigms. One of them is object-oriented programming. In contrast
+            to other
+            known OOP languages, JavaScript doesn't have the concept of classes. Inheritance is done using
+            prototypes.</p><!--kg-card-begin: markdown-->
+        <table>
+            <thead>
+            <tr>
+                <th>Class-based languages</th>
+                <th>Prototype-based languages</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Java, C#, C++, Python, Ruby</td>
+                <td>JavaScript</td>
+            </tr>
+            </tbody>
+        </table>
+        <!--kg-card-end: markdown--><p class="paragraph">How then are we supposed to create objects if there are no
+        classes? Well,
+        there is a couple of options.</p>
+        <p class="paragraph">To create a single object, you can use the object literal syntax. Just put a bunch of
+            properties between
+            curly braces and assign it to a variable.</p><!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">var john = {
+    name: 'John',
+    lastName: 'Doe',
+    yearOfBirth: 1990
+}
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">Now, you can access these properties, either with dot or
+        bracket
+        notation.</p><!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">// Dot notation
+john.name
+
+// Bracket notation
+john['name']
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">It works fine when you want a single object, but what if you
+        need many
+        similar objects? In that situation, use a function constructor.</p>
+        <p class="paragraph">So-called function constructors are just regular functions, but their responsibility is to
+            create new
+            objects. You can think about them as blueprints.</p><!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">function Person(name, lastName, yearOfBirth) {
+    this.name = name;
+    this.lastName = lastName;
+    this.yearOfBirth = yearOfBirth;
+}
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">To create an object with that constructor, use the
+        <code>new</code> operator.
+    </p><!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">const john = new Person('John', 'Doe', 1990);
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">The <code>new</code> operator creates an empty object, passes
+        it to the
+        constructor function as the value of <code>this</code> and links the newly created object with the prototype
+        object of the Person constructor. More about that later.</p>
+        <p class="paragraph">In return, we get the object with properties defined inside the Person constructor, so the
+            name,
+            lastName, and yearOfBirth.</p>
+        <h2 class="heading--medium" id="what-is-the-prototype">What is the prototype?</h2>
+        <blockquote>In JavaScript, every object has its prototype, but only functions have the prototype property.
+        </blockquote>
+        <p class="paragraph">I know this sentence sounds confusing, so let me break it down into two parts.</p>
+        <p class="paragraph"><strong>Functions have the prototype property.</strong> What exactly does it mean? As you
+            may have heard,
+            functions in JavaScript, are a special type of objects. It means they can have properties, like every
+            other object. One of these properties is the prototype property, which by default, stores a reference to
+            an empty object.</p><!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">function Person(name, lastName, yearOfBirth) {
+    this.name = name;
+    this.lastName = lastName;
+    this.yearOfBirth = yearOfBirth;
+}
+
+console.log(Person.prototype); // empty object
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">We can fill this empty object with properties and methods that
+        are inherited
+        by the instances of the Person constructor.</p><!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">function Person(name, lastName, yearOfBirth) {
+    this.name = name;
+    this.lastName = lastName;
+    this.yearOfBirth = yearOfBirth;
+}
+
+Person.prototype.calcAge = function() {
+    const year = new Date().getFullYear();
+    return year - this.yearOfBirth;
+}
+
+const john = new Person('John', 'Doe', 1990);
+
+console.log(john.calcAge()); // 29
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">The john object inherits the <code>calcAge</code> method
+        because it's an
+        instance of the Person constructor. We can create other objects using the same constructor, and all of them
+        inherit the <code>calcAge</code> method.</p><!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">const john = new Person('John', 'Doe', 1990);
+const mike = new Person('Mike', 'Smith', 1995);
+const jane = new Person('Jane', 'Wilson', 2000);
+
+console.log(john.calcAge()); // 29
+console.log(mike.calcAge()); // 24
+console.log(jane.calcAge()); // 19
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">Let's take care of the second part of the sentence. <strong>Every
+        object has
+        its prototype. </strong>It means that in JavaScript, every possible object is an instance of some
+        constructor, and inherits from the prototype object of this constructor.</p>
+        <p class="paragraph">Remember when the john object inherited the <code>calcAge</code> method from the
+            <code>Person.prototype</code> object? The same thing applies to every single object in JavaScript.</p>
+        <p class="paragraph">Take a look at arrays. You can create an array using the literal syntax (square brackets),
+            but you can
+            also use the Array constructor.</p><!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">// Array literal syntax
+const arr = [1, 2, 3];
+
+// Array constructor
+const arr2 = new Array(1, 2, 3);
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">Both lines create arrays with three elements. What does it
+        mean? That arrays
+        are objects, instances of the Array constructor.</p>
+        <p class="paragraph">It also means that arrays inherit from the <code>Array.prototype</code>. I'm sure you know
+            the <code>forEach</code>
+            method used to iterate through the array. Guess what? This method comes from the
+            <code>Array.prototype</code>.</p><!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">[1, 2, 3].forEach(el =&gt; {
+    console.log(el);
+});
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">Additionally, you can always check the prototype of an object
+        with <code>Object.getPrototypeOf()</code>
+        method.</p><!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">const arr = [1, 2, 3];
+
+console.log(Object.getPrototypeOf(arr));
+</code></pre>
+        <!--kg-card-end: markdown--><h2 class="heading--medium" id="prototypes-have-their-prototypes">Prototypes have
+        their prototypes</h2>
+        <p class="paragraph">If prototypes are objects, does it mean they also have their prototypes? And if so, what is
+            the prototype
+            of the prototype?</p>
+        <p class="paragraph">We know that prototypes are just simple objects. We also know that every single object in
+            JavaScript has
+            its prototype, from which it inherits properties and methods. All objects in JavaScript are descended
+            from <code>Object</code> , which means they inherit from the <code>Object.prototype</code>.</p>
+        <p class="paragraph">To prove this, create an empty object and check its prototype.</p>
+        <!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">console.log(Object.getPrototypeOf({}));
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">The same thing applies to functions. Functions are a special
+        type of objects,
+        which means they are created with the <code>Function</code> constructor and inherit from the <code>Function.prototype</code>
+        .</p>
+        <h2 class="heading--medium" id="the-prototype-chain">The prototype chain</h2>
+        <p class="paragraph">Let's take a look at how the JavaScript interpreter finds the method in the chain of the
+            prototypes.</p>
+        <!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">function Person(name, lastName, yearOfBirth) {
+    this.name = name;
+    this.lastName = lastName;
+    this.yearOfBirth = yearOfBirth;
+}
+
+const john = new Person('John', 'Doe', 1990);
+
+console.log(john.toString());
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">We have the john object that is an instance of the Person
+        constructor, which
+        means it inherits from the <code>Person.prototype</code> object. We want to call the <code>toString</code>
+        method, which sits in the <code>Object.prototype</code>. How is the interpreter able to find this method?
+    </p>
+        <p class="paragraph">The JavaScript interpreter first checks if the <code>toString</code> method exists in the
+            john object. It
+            doesn't, so the interpreter looks for this method in the <code>Person.prototype</code> object. It can't
+            find it here, so it moves up to the next prototype in the chain, which is the
+            <code>Object.prototype</code> . It finally finds the <code>toString</code> there and calls this method
+            on the john object.</p>
+        <h2 class="heading--medium" id="why-use-prototypes">Why use prototypes?</h2>
+        <p class="paragraph">Why would I even place a method in the prototype if I can just put it in the constructor
+            function?</p>
+        <p class="paragraph">That's true, but there are benefits behind prototypes. &nbsp;Compare these two code
+            samples.</p>
+        <!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">function Person(name, lastName, yearOfBirth) {
+    this.name = name;
+    this.lastName = lastName;
+    this.yearOfBirth = yearOfBirth;
+    this.calcAge = function() {
+        const currentYear = new Date().getFullYear();
+        return currentYear - this.yearOfBirth;
+    }
+}
+
+const john = new Person('John', 'Doe', 1990);
+
+console.log(john);
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">In this example, the <code>calcAge</code> method is added
+        directly to the
+        instance of the Person constructor. Use the <code>console.log()</code> method to see that the
+        <code>calcAge</code> belongs to the john object.</p>
+        <figure class="kg-card kg-image-card kg-card-hascaption"><img
+                src="https://www.akoz.blog/content/images/2019/06/without_prototype.png"
+                class="kg-image lightense-target">
+            <figcaption>A method added directly to the instance of a constructor</figcaption>
+        </figure>
+        <p class="paragraph">From the other hand, we have this code.</p><!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">function Person(name, lastName, yearOfBirth) {
+    this.name = name;
+    this.lastName = lastName;
+    this.yearOfBirth = yearOfBirth;
+}
+
+Person.prototype.calcAge = function() {
+    const currentYear = new Date().getFullYear();
+    return currentYear - this.yearOfBirth;
+}
+
+const john = new Person('John', 'Doe', 1990);
+
+console.log(john);
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">The <code>calcAge</code> method sits in the prototype and is
+        inherited by the
+        instances of the Person constructor. The john object doesn't own the <code>calcAge</code> method, but it can
+        access it through the prototype chain.</p>
+        <figure class="kg-card kg-image-card kg-card-hascaption"><img
+                src="https://www.akoz.blog/content/images/2019/06/with_prototype.png"
+                class="kg-image lightense-target">
+            <figcaption>A method added to the prototype property of a constructor</figcaption>
+        </figure>
+        <p class="paragraph">In most cases, using prototypes is more efficient and saves up memory because a method is
+            declared only
+            once for all objects created with a constructor, instead of being declared for each instance
+            separately.</p>
+        <h2 class="heading--medium" id="the-__proto__-property">The __proto__ property</h2>
+        <p class="paragraph">In the last example, you might have seen the strange-looking <code>__proto__</code>
+            property.</p>
+        <figure class="kg-card kg-image-card kg-card-hascaption"><img
+                src="https://www.akoz.blog/content/images/2019/06/__proto__.png" class="kg-image lightense-target">
+            <figcaption>The <code>__proto__</code> property</figcaption>
+        </figure>
+        <p class="paragraph">The <code>__proto__</code> property is a function that allows us to get and set the
+            prototype of an
+            object. In the case of the john object, the <code>__proto__</code> returns the
+            <code>Person.prototype</code> object.</p>
+        <p class="paragraph">Note that the use of the <code>__proto__</code> property is not recommended anymore. To get
+            a prototype
+            of an object, use the <code>Object.getPrototypeOf()</code> method.</p>
+        <h2 class="heading--medium" id="the-object-create-method">The Object.create() method</h2>
+        <p class="paragraph">In some cases, you may want to specify the prototype for your newly created object without
+            declaring any
+            constructor functions. The <code>Object</code> has a special method for that.</p>
+        <!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">const john = {
+    name: 'John',
+    lastName: 'Doe',
+    yearOfBirth: 1990,
+    calcAge: function() {
+        const currentYear = new Date().getFullYear();
+        return currentYear - this.yearOfBirth;
+    }
+}
+
+const mike = Object.create(john);
+mike.name = 'Mike';
+mike.lastName = 'Smith';
+mike.yearOfBirth = 1995;
+
+console.log(mike.calcAge());
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">The <code>Object.create()</code> method allows us to specify
+        the prototype
+        for the newly created object. In this case, the mike object uses the john object as its prototype, which
+        allows Mike to use the <code>calcAge</code> method.</p>
+        <p class="paragraph">This method is useful to implement so-called classical inheritance known from the
+            class-based languages,
+            but more on that in another article.</p>
+        <h2 class="heading--medium" id="classes-in-javascript">Classes in JavaScript</h2>
+        <p class="paragraph">We determined earlier that JavaScript is a prototype-based language that doesn't have the
+            concept of
+            classes. However, the ES6 standard introduces a new class syntax to JavaScript.</p>
+        <!--kg-card-begin: markdown-->
+        <pre><code class="language-javascript">class Person {
+
+    constructor(name, lastName, yearOfBirth) {
+        this.name = name;
+        this.lastName = lastName;
+        this.yearOfBirth = yearOfBirth;
+    }
+
+    calcAge() {
+        const currentYear = new Date().getFullYear();
+        return currentYear - this.yearOfBirth;
+    }
+
+}
+</code></pre>
+        <!--kg-card-end: markdown--><p class="paragraph">Now, you can use classes in JavaScript. However, they are just
+        syntactical
+        sugar, which means that behind the scenes, JavaScript is still based on prototypes. It's just a syntax that
+        makes writing code more straightforward, but also hides the prototypal nature of JavaScript from new
+        developers.</p>
+        <h2 class="heading--medium" id="summary">Summary</h2>
+        <p class="paragraph">In this article, we've determined that JavaScript is a prototype-based language. Prototypes
+            are simple
+            objects used for inheritance. One object can inherit properties and methods from the other. Usually,
+            using prototypes is more efficient and saves up memory because a method is declared only once, in a
+            prototype. JavaScript doesn't have a true concept of classes known from the class-based languages, but
+            we can use the class syntax.</p>
+        <div class="margin-bottom--big"></div>
+    </div>
+</main>
+
+<script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+</body>
+</html>

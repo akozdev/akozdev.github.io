@@ -1,0 +1,199 @@
+/**
+ * Fonts:
+   - font-family: 'Libre Baskerville', serif;
+   - font-family: 'Muli', sans-serif;
+ */
+
+:root {
+    --font-color: #444444;
+    --heading-color: #2f3038;
+    --background-color: #FAF9F5; /* or #f8f8ff or #fffff4 or #FAF9F5 or #e0c79f*/
+    --accent-color: #C2B280; /* #C2B280 or #00aaff*/
+    --accent-color-transparent: rgba(194, 178, 128, .2); /* rgba(194, 178, 128, .2) */
+    --heading-font: 'Libre Baskerville', serif;
+    --body-font: 'Muli', sans-serif;
+    --shadow-1: 0 1px 2px rgba(194, 178, 128,0.07),
+    0 2px 4px rgba(194, 178, 128,0.07),
+    0 4px 8px rgba(194, 178, 128,0.07);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html { font-size: 62.5% }
+body {
+    box-sizing: border-box;
+    color: var(--font-color);
+    background-color: var(--background-color);
+    font-size: 1.8rem;
+    font-family: var(--body-font);
+    line-height: 140%;
+    letter-spacing: .6px;
+}
+
+.container {
+    max-width: 57rem;
+    /*margin: 0 auto;*/
+    margin: 12vw 15vh 0;
+}
+
+/* SPACING & DIVIDERS */
+.margin-top--big { margin-top: 7.5rem }
+.margin-bottom--big { margin-bottom: 7.5rem }
+
+.margin-top--medium { margin-top: 5rem }
+.margin-bottom--medium { margin-bottom: 5rem }
+
+.margin-top--small { margin-top: 2.5rem }
+.margin-bottom--small { margin-bottom: 2.5rem }
+
+.divider {
+    height: 2px;
+    background-color: rgba(194, 178, 128, .4);
+    margin-bottom: 2rem;
+}
+
+.divider--limited-spacing {
+    height: 2px;
+    background-color: rgba(194, 178, 128, .4);
+    margin-bottom: 1rem;
+}
+
+/* TABLE */
+table {
+    border: 1px solid #2a3439;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+/* BLOCKQUOTE */
+blockquote {
+    font-size: 2rem;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    font-weight: bold;
+}
+
+th:not(:last-child), td:not(:last-child) {
+    border-right: 1px solid #2a3439;
+}
+
+th {
+    padding: 1.5rem;
+    border-bottom: 1px solid #2a3439;
+}
+
+td { padding: 1.5rem; }
+
+/* HEADINGS */
+.heading {
+    color: var(--heading-color);
+    font-family: var(--heading-font);
+    font-weight: 300;
+    line-height: 200%;
+}
+
+.heading--big {
+    margin-bottom: 2rem;
+    font-size: 4.5rem;
+    line-height: 1.4em;
+}
+
+.heading--medium {
+    margin-bottom: 2rem;
+    font-family: var(--body-font);
+    font-size: 3rem;
+    font-weight: 400;
+}
+
+.paragraph {
+    margin-bottom: 3rem;
+}
+
+/* LINKS */
+a:link,
+a:visited {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px solid var(--accent-color);
+    transition: .3s;
+}
+
+a:hover,
+a:active {
+    background-color: var(--accent-color-transparent);
+}
+
+/* SELECTION */
+::selection {
+    background: var(--accent-color-transparent);
+}
+::-moz-selection {
+    background: var(--accent-color-transparent);
+}
+
+/* BUTTONS */
+.btn {
+    border: none;
+    padding: 1rem 2rem;
+    background-color: transparent;
+    font-size: 1.6rem;
+    color: var(--body-font);
+    box-shadow: var(--shadow-1);
+    font-family: var(--heading-font);
+}
+
+.btn--ghost {
+    border: 1px solid var(--accent-color);
+    transition: .3s;
+}
+
+.btn--ghost:hover {
+    background-color: var(--accent-color-transparent);
+}
+
+/* Author card */
+.author-card {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    border: 2px solid rgba(194, 178, 128, .4);
+    box-shadow: var(--shadow-1);
+}
+
+.author-card-image {
+    width: 10rem;
+    height: 10rem;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: var(--shadow-1);
+}
+
+.author-card-info-container {
+    margin-left: 1.5rem;
+}
+
+.author-card-name {
+    margin-bottom: 1rem;
+    font-family: var(--heading-font);
+    font-weight: bold;
+}
+
+/* CODE */
+pre code {
+    background-color: var(--accent-color-transparent);
+    border: 1px solid rgba(194, 178, 128, .4);
+    display: block;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: var(--shadow-1);
+}
+
+.inline-code {
+    padding: 2px;
+    border-radius: 5px;
+    background-color: var(--accent-color-transparent);
+}
