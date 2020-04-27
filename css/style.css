@@ -197,3 +197,12 @@ pre code {
     border-radius: 5px;
     background-color: var(--accent-color-transparent);
 }
+
+/* IMAGE */
+figure {
+    margin-bottom: 2rem;
+}
+
+figcaption {
+    font-size: 1.4rem;
+}
